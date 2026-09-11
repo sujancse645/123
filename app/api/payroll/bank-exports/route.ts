@@ -1,0 +1,21 @@
+import { createDecipheriv, createHash } from 'node:crypto';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { createServiceRoleClient, createUserScopedClient } from '@/lib/supabase/server';
+
+const schema=z.object({payRunId:z.string().uuid(),companyBankAccountId:z.string().uuid(),templateId:z.string().uuid(),batchReference:z.string().trim().min(3).max(80),paymentDate:z.string().date()});
+function decrypt(value:string){const [version,iv,tag,data]=value.split(':');if(version!=='v1'||!iv||!tag||!data)throw new Error('A bank account uses an unsupported encrypted format');const configured=process.env.BANK_DATA_ENCRYPTION_KEY;if(!configured)throw new Error('BANK_DATA_ENCRYPTION_KEY is not configured');const key=createHash('sha256').update(configured).digest();const decipher=createDecipheriv('aes-256-gcm',key,Buffer.from(iv,'base64'));decipher.setAuthTag(Buffer.from(tag,'base64'));return Buffer.concat([decipher.update(Buffer.from(data,'base64')),decipher.final()]).toString('utf8')}
+const csvCell=(value:unknown)=>`"${String(value??'').replaceAll('"','""')}"`;
+
+export async function POST(request:NextRequest){
+  try{
+    const token=request.headers.get('authorization')?.replace(/^Bearer\s+/,'');if(!token)return NextResponse.json({error:{code:'UNAUTHENTICATED',message:'Bearer token required'}},{status:401});
+    const input=schema.parse(await request.json());const scoped=createUserScopedClient(token);const service=createServiceRoleClient();const {data:auth}=await scoped.auth.getUser(token);if(!auth.user)return NextResponse.json({error:{code:'UNAUTHENTICATED',message:'Invalid session'}},{status:401});
+    const prepared=await scoped.rpc('prepare_payroll_bank_export',{p_pay_run_id:input.payRunId,p_company_bank_account_id:input.companyBankAccountId,p_template_id:input.templateId,p_batch_reference:input.batchReference,p_payment_date:input.paymentDate});if(prepared.error)throw prepared.error;
+    const result=prepared.data as {export_id:string;included_count:number;excluded_count:number;total_amount:number};const {data:items}=await service.from('payroll_bank_export_items').select('*').eq('export_id',result.export_id);const included=items?.filter(i=>i.included)??[];const excluded=items?.filter(i=>!i.included)??[];
+    const rows=await Promise.all(included.map(async item=>{const [{data:employee},{data:account}]=await Promise.all([service.from('employees').select('*').eq('id',item.employee_id).single(),service.from('employee_bank_accounts').select('*').eq('employee_id',item.employee_id).eq('is_primary',true).single()]);if(!employee||!account)throw new Error('Reconciled bank record disappeared during export');return [employee.employee_code,employee.full_name,account.account_holder_name,account.bank_name,decrypt(account.account_number_encrypted),account.ifsc_code,item.amount,item.payment_reference,`Salary ${input.paymentDate.slice(0,7)}`]}));
+    const header=['Employee ID','Employee Name','Account Holder','Bank Name','Account Number','IFSC','Net Pay','Payment Reference','Narration'];const csv=[header,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n');const bytes=Buffer.from(csv,'utf8');const checksum=createHash('sha256').update(bytes).digest('hex');
+    const {data:firstEmployee}=items?.[0]?await service.from('employees').select('company_id').eq('id',items[0].employee_id).single():{data:null};const exportPath=`${firstEmployee?.company_id??'unknown'}/${result.export_id}.csv`;const upload=await service.storage.from('payroll-bank-exports').upload(exportPath,bytes,{contentType:'text/csv',upsert:false});if(upload.error)throw upload.error;await service.from('payroll_bank_exports').update({checksum,storage_path:exportPath}).eq('id',result.export_id);const signed=await service.storage.from('payroll-bank-exports').createSignedUrl(exportPath,300);if(signed.error)throw signed.error;
+    return NextResponse.json({exportId:result.export_id,includedCount:result.included_count,excludedCount:result.excluded_count,totalAmount:result.total_amount,checksum,signedUrl:signed.data.signedUrl,expiresIn:300,excluded});
+  }catch(error){return NextResponse.json({error:{code:'BANK_EXPORT_ERROR',message:error instanceof Error?error.message:'Unable to generate bank export'}},{status:400})}
+}

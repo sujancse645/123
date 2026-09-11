@@ -1,0 +1,281 @@
+import { BiometricDevice, AppNotification, AuditEvent, ProfileUpdateRequest, AttendanceCorrectionRequest } from '@/lib/types';
+
+export const BIOMETRIC_DEVICES: BiometricDevice[] = [
+  {
+    id: 'bio-1',
+    name: 'Bengaluru Tech Center - Main Turnstile A',
+    location: 'Tower 3, Ground Floor Lobby',
+    ipAddress: '192.168.10.45',
+    status: 'connected',
+    lastSync: '2 minutes ago',
+    mappedEmployeesCount: 142,
+    latestEvent: 'Rohan Sharma (PP-EMP-1042) Check-In 09:28 AM',
+  },
+  {
+    id: 'bio-2',
+    name: 'Bengaluru Tech Center - Server Room Reader',
+    location: 'Tower 3, 4th Floor Tech Wing',
+    ipAddress: '192.168.10.49',
+    status: 'connected',
+    lastSync: '5 minutes ago',
+    mappedEmployeesCount: 38,
+    latestEvent: 'Deepak Chawla (PP-EMP-1290) Access Granted 09:35 AM',
+  },
+  {
+    id: 'bio-3',
+    name: 'Mumbai Regional Office - Reception Face Terminal',
+    location: 'Bandra-Kurla Complex, 6th Floor',
+    ipAddress: '10.200.4.12',
+    status: 'connected',
+    lastSync: '12 minutes ago',
+    mappedEmployeesCount: 65,
+    latestEvent: 'Neha Gupta (PP-PAY-3015) Face Match 09:32 AM',
+  },
+  {
+    id: 'bio-4',
+    name: 'Pune Innovation Hub - Biometric Gate 2',
+    location: 'Hinjawadi Phase 1, Gate 2',
+    ipAddress: '10.150.8.20',
+    status: 'error',
+    lastSync: '4 hours ago (Sync Timeout)',
+    mappedEmployeesCount: 84,
+    latestEvent: 'Network socket failure during scheduled sync',
+  },
+];
+
+export const INITIAL_NOTIFICATIONS: AppNotification[] = [
+  {
+    id: 'notif-1',
+    title: 'Leave Request Submitted',
+    message: 'Casual Leave request for 18 Sep 2026 has been submitted for manager approval.',
+    type: 'leave',
+    timestamp: '2 hours ago',
+    read: false,
+    status: 'submitted',
+  },
+  {
+    id: 'notif-2',
+    title: 'Payslip Generated',
+    message: 'Your official payslip for August 2026 is now available for download.',
+    type: 'payroll',
+    timestamp: '3 days ago',
+    read: false,
+    status: 'approved',
+  },
+  {
+    id: 'notif-3',
+    title: 'Attendance Verified',
+    message: 'Today’s check-in (09:28 AM) was successfully verified via Face Biometrics.',
+    type: 'attendance',
+    timestamp: 'Today, 09:28 AM',
+    read: true,
+    status: 'approved',
+  },
+  {
+    id: 'notif-4',
+    title: 'Profile Update Under Review',
+    message: 'Your request to update bank account details is currently pending HR verification.',
+    type: 'profile',
+    timestamp: 'Yesterday',
+    read: true,
+    status: 'submitted',
+  },
+  {
+    id: 'notif-5',
+    title: 'Device Sync Alert',
+    message: 'Pune Gate 2 biometric terminal experienced a synchronization timeout.',
+    type: 'biometric',
+    timestamp: '4 hours ago',
+    read: false,
+    status: 'warning',
+  },
+];
+
+export const INITIAL_PROFILE_REQUESTS: ProfileUpdateRequest[] = [
+  {
+    id: 'pur-1',
+    employeeId: 'emp-1',
+    employeeName: 'Rohan Sharma',
+    field: 'bankAccount',
+    fieldLabel: 'Salary Bank Account',
+    originalValue: 'HDFC Bank •••• 8412 (IFSC HDFC0001245)',
+    requestedValue: 'Axis Bank •••• 5591 (IFSC UTIB0000010)',
+    status: 'pending',
+    submittedDate: '2026-09-02',
+  },
+  {
+    id: 'pur-2',
+    employeeId: 'emp-6',
+    employeeName: 'Kavita Menon',
+    field: 'address',
+    fieldLabel: 'Residential Address',
+    originalValue: '34, Lavelle Road, Shanthala Nagar, Bengaluru 560001',
+    requestedValue: '402, Oakwood Residences, Koramangala 3rd Block, Bengaluru 560034',
+    status: 'pending',
+    submittedDate: '2026-09-03',
+  },
+];
+
+export const INITIAL_CORRECTION_REQUESTS: AttendanceCorrectionRequest[] = [
+  {
+    id: 'acr-1',
+    employeeId: 'emp-1',
+    employeeName: 'Rohan Sharma',
+    date: '2026-08-27',
+    originalCheckIn: '10:15 AM',
+    originalCheckOut: '06:30 PM',
+    requestedCheckIn: '09:30 AM',
+    requestedCheckOut: '06:30 PM',
+    reason: 'Heavy traffic roadblock on Hebbal flyover due to metro construction.',
+    status: 'pending',
+    submittedDate: '2026-08-28',
+  },
+  {
+    id: 'acr-2',
+    employeeId: 'emp-10',
+    employeeName: 'Deepak Chawla',
+    date: '2026-09-03',
+    originalCheckIn: '09:20 AM',
+    originalCheckOut: '--:--',
+    requestedCheckIn: '09:20 AM',
+    requestedCheckOut: '06:45 PM',
+    reason: 'Missed turnstile swipe while leaving during emergency fire drill.',
+    status: 'pending',
+    submittedDate: '2026-09-04',
+  },
+];
+
+export const AUDIT_EVENTS: AuditEvent[] = [
+  {
+    id: 'aud-1',
+    user: 'Rajesh Kulkarni (Payroll Director)',
+    role: 'HR Payroll Manager',
+    action: 'Payrun Computed',
+    target: 'PAYRUN-2026-09-REG',
+    timestamp: '2026-09-04 10:45 AM',
+    ip: '10.20.1.14',
+    details: 'Computed gross payroll for 12 employees (Total: ₹7,48,000)',
+  },
+  {
+    id: 'aud-2',
+    user: 'Priya Sundaram (People Ops)',
+    role: 'HR Manager',
+    action: 'Leave Approved',
+    target: 'LR-102 (Rohan Sharma)',
+    timestamp: '2026-08-09 02:15 PM',
+    ip: '10.20.1.28',
+    details: 'Approved 2 days unpaid leave with estimated deduction ₹2,334',
+  },
+  {
+    id: 'aud-3',
+    user: 'Sudeesh K (Global Admin)',
+    role: 'Admin',
+    action: 'Device Config Updated',
+    target: 'Bengaluru Tech Center Reader A',
+    timestamp: '2026-08-20 11:10 AM',
+    ip: '10.20.1.5',
+    details: 'Adjusted optical biometric sensitivity to Level 4',
+  },
+  {
+    id: 'aud-4',
+    user: 'Neha Gupta',
+    role: 'HR Payroll User',
+    action: 'Payslip Draft Viewed',
+    target: 'PAYSLIP-202608-EMP1',
+    timestamp: '2026-08-27 04:00 PM',
+    ip: '10.20.1.19',
+    details: 'Inspected component breakdown for Tech Engineering structure',
+  },
+];
+
+export interface AuditLogItem {
+  id: string;
+  timestamp: string;
+  userName: string;
+  userRole: string;
+  action: string;
+  resource: string;
+  category: 'auth' | 'payroll' | 'attendance' | 'leave' | 'profile' | 'system';
+  ipAddress: string;
+  status: 'success' | 'warning' | 'error';
+}
+
+export const AUDIT_LOGS: AuditLogItem[] = [
+  {
+    id: 'log-1',
+    timestamp: '2026-09-04T10:45:00Z',
+    userName: 'Neha Gupta',
+    userRole: 'payroll_manager',
+    action: 'Payrun Computed (12 Payslips Generated)',
+    resource: 'PAYRUN-2026-09-REG',
+    category: 'payroll',
+    ipAddress: '10.20.1.14',
+    status: 'success',
+  },
+  {
+    id: 'log-2',
+    timestamp: '2026-09-04T09:32:15Z',
+    userName: 'Aditi Sharma',
+    userRole: 'employee',
+    action: 'Biometric Facial Check-In Verified',
+    resource: 'Terminal Gate-01',
+    category: 'attendance',
+    ipAddress: '192.168.10.45',
+    status: 'success',
+  },
+  {
+    id: 'log-3',
+    timestamp: '2026-09-04T09:15:00Z',
+    userName: 'Priya Sundaram',
+    userRole: 'hr_manager',
+    action: 'Leave Request Approved (Casual Leave - 1 Day)',
+    resource: 'LR-2026-088',
+    category: 'leave',
+    ipAddress: '10.20.1.28',
+    status: 'success',
+  },
+  {
+    id: 'log-4',
+    timestamp: '2026-09-03T18:22:40Z',
+    userName: 'Rohan Verma',
+    userRole: 'payroll_user',
+    action: 'Draft Payrun Initiated for August 2026',
+    resource: 'PAYRUN-2026-08-REG',
+    category: 'payroll',
+    ipAddress: '10.20.1.19',
+    status: 'success',
+  },
+  {
+    id: 'log-5',
+    timestamp: '2026-09-03T16:05:12Z',
+    userName: 'Rajeshwari Iyer',
+    userRole: 'admin',
+    action: 'Biometric Turnstile Calibration Synchronized',
+    resource: 'Server Room Gate B',
+    category: 'system',
+    ipAddress: '10.20.1.5',
+    status: 'success',
+  },
+  {
+    id: 'log-6',
+    timestamp: '2026-09-03T14:40:22Z',
+    userName: 'Deepak Chawla',
+    userRole: 'employee',
+    action: 'Bank IFSC Update Request Submitted',
+    resource: 'Profile-EMP-10',
+    category: 'profile',
+    ipAddress: '10.20.1.44',
+    status: 'warning',
+  },
+  {
+    id: 'log-7',
+    timestamp: '2026-09-02T11:15:00Z',
+    userName: 'Rajeshwari Iyer',
+    userRole: 'admin',
+    action: 'Role-Permission Policy Enforced',
+    resource: 'RBAC Policy v3.2',
+    category: 'auth',
+    ipAddress: '10.20.1.5',
+    status: 'success',
+  },
+];

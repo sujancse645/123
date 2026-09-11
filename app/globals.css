@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
+
+@theme {
+  --color-plum-primary: #714B67;
+  --color-plum-deep: #4D3348;
+  --color-plum-muted: #A4879F;
+  --color-brand-yellow: #F4C430;
+  --color-pale-yellow: #FFF6D2;
+  --color-warm-white: #FBFAFB;
+  --color-surface-white: #FFFFFF;
+  --color-soft-grey: #F4F3F5;
+  --color-border-grey: #E4E1E5;
+  --color-text-primary: #28262D;
+  --color-text-secondary: #74717A;
+  --color-brand-success: #438A6B;
+  --color-brand-warning: #D49525;
+  --color-brand-error: #C85A54;
+}
+
+body {
+  background-color: var(--color-warm-white);
+  color: var(--color-text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.login-scene {
+  --pointer-x: 0;
+  --pointer-y: 0;
+  perspective: 900px;
+}
+.login-scene-grid {
+  opacity: 0.1;
+  background-image: linear-gradient(rgba(255,255,255,.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: rotateX(62deg) scale(1.5) translateY(18%);
+  transform-origin: bottom;
+}
+.login-bubble {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 24%, rgba(255,255,255,.8), rgba(244,196,48,.52) 25%, rgba(113,75,103,.18) 65%, transparent 72%);
+  box-shadow: inset -10px -12px 24px rgba(40,38,45,.28), 0 18px 38px rgba(26,15,23,.25);
+  pointer-events: none;
+  will-change: transform;
+  animation: login-float 7s ease-in-out infinite;
+}
+.login-bubble-1 { width: 112px; height: 112px; left: 12%; top: 17%; transform: translate(calc(var(--pointer-x) * 24px), calc(var(--pointer-y) * 24px)); }
+.login-bubble-2 { width: 58px; height: 58px; right: 13%; top: 12%; animation-delay: -2s; transform: translate(calc(var(--pointer-x) * -32px), calc(var(--pointer-y) * -32px)); }
+.login-bubble-3 { width: 78px; height: 78px; right: 7%; top: 43%; animation-delay: -4s; transform: translate(calc(var(--pointer-x) * 42px), calc(var(--pointer-y) * 42px)); }
+.login-bubble-4 { width: 38px; height: 38px; left: 8%; bottom: 23%; animation-delay: -1s; transform: translate(calc(var(--pointer-x) * -50px), calc(var(--pointer-y) * -50px)); }
+.login-bubble-5 { width: 150px; height: 150px; right: 18%; bottom: 6%; opacity: .38; animation-delay: -3s; transform: translate(calc(var(--pointer-x) * 18px), calc(var(--pointer-y) * 18px)); }
+.login-bubble-6 { width: 28px; height: 28px; left: 42%; top: 28%; animation-delay: -5s; transform: translate(calc(var(--pointer-x) * 58px), calc(var(--pointer-y) * 58px)); }
+.login-bubble-7 { width: 52px; height: 52px; left: 36%; bottom: 12%; animation-delay: -2.5s; transform: translate(calc(var(--pointer-x) * -28px), calc(var(--pointer-y) * -28px)); }
+@keyframes login-float { 0%, 100% { margin-top: 0; } 50% { margin-top: -18px; } }
+.login-loader-ring { border-top-color: #714B67; animation: login-spin 1.15s linear infinite; }
+.login-loader-ring-delayed { border-right-color: #F4C430; animation-direction: reverse; animation-duration: 1.8s; }
+.login-progress { width: 45%; animation: login-progress 1.1s ease-in-out forwards; }
+@keyframes login-spin { to { transform: rotate(360deg); } }
+@keyframes login-progress { from { width: 8%; } to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .login-bubble, .login-loader-ring, .login-progress { animation: none; }
+  .login-progress { width: 100%; }
+}
+
+/* Script display face for primary page headings. */
+h1,
+h2 {
+  font-family: 'Caveat', 'Playlist Script', cursive;
+  font-weight: 600;
+  letter-spacing: normal;
+}
+
+/* Tabular numbers for salaries */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D5D1D6;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A4879F;
+}

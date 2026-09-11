@@ -1,0 +1,7 @@
+import {describe,expect,it} from 'vitest';
+import {loanService} from './loan-service';
+
+describe('immutable loan transactions',()=>{
+  it('appends a lump sum, preserves history and ignores an exact retry',async()=>{const before=(await loanService.getAllLoans()).find(l=>l.id==='loan-001')!;const oldHistory=before.transactionHistory?.length??0;const input={paymentAmount:1000,paymentDate:'2026-09-05',paymentMethod:'upi' as const,repaymentAdjustment:'reduce_tenure' as const,idempotencyKey:'test-lump-001',reference:'UPI-TEST-001'};const paid=await loanService.recordPartialPayment(before.id,input);expect(paid.transactionHistory).toHaveLength(oldHistory+1);expect(paid.repaymentSchedule.filter(i=>i.status==='deducted').length).toBeGreaterThan(0);const retried=await loanService.recordPartialPayment(before.id,input);expect(retried.transactionHistory).toHaveLength(oldHistory+1)});
+  it('closes a loan once, zeros balances and settles future installments',async()=>{const closed=await loanService.closeLoan('loan-003','UTR-TEST-CLOSE','test-close-003');expect(closed.status).toBe('closed');expect(closed.outstandingPrincipal).toBe(0);expect(closed.outstandingInterest).toBe(0);expect(closed.repaymentSchedule.filter(i=>['upcoming','overdue','partially_paid'].includes(i.status))).toHaveLength(0);const retried=await loanService.closeLoan('loan-003','UTR-TEST-CLOSE','test-close-003');expect(retried.transactionHistory?.filter(t=>t.idempotencyKey==='test-close-003')).toHaveLength(1)});
+});
