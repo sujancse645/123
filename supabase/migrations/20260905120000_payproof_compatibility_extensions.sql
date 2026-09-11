@@ -1,4 +1,4 @@
--- PeoplePay360 additive compatibility migration.
+-- PayProof additive compatibility migration.
 -- Apply after the original complete setup. This file intentionally does not
 -- recreate or rename any legacy table and may be applied to a populated DB.
 

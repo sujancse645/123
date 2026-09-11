@@ -140,7 +140,7 @@ export default function DemoMailboxPage() {
                     </div>
                   )}
                   <div>
-                    <span className="text-[#74717A]">From:</span> PeoplePay360 HR Automation System &lt;no-reply@peoplepay360.test&gt;
+                    <span className="text-[#74717A]">From:</span> PayProof HR Automation System &lt;no-reply@payproof.test&gt;
                   </div>
                 </div>
               </div>

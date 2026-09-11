@@ -1,4 +1,4 @@
--- Migration: 20260905130000_peoplepay360_missing_features.sql
+-- Migration: 20260905130000_payproof_missing_features.sql
 -- Description: Adds tables for profile update requests, attendance correction requests, and payroll simulations.
 
 -- 1. Profile Update Requests

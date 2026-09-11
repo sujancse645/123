@@ -79,7 +79,7 @@ export function RoleSwitcherModal({ isOpen, onClose }: RoleSwitcherModalProps) {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-[#28262D] flex items-center gap-2">
-                  PeoplePay360 Persona Switcher
+                  PayProof Persona Switcher
                   <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#FFF6D2] text-[#9A6B0A] border border-[#F8E29E]">
                     Live Demo
                   </span>

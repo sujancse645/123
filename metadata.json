@@ -1,5 +1,5 @@
 {
-  "name": "PeoplePay360",
+  "name": "PayProof",
   "description": "Enterprise HR and payroll platform with role-based self-service, payrun processing, attendance verification, and salary simulation.",
   "requestFramePermissions": ["camera"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

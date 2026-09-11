@@ -1,4 +1,4 @@
-// Generated-compatible Supabase type snapshot for the PeoplePay360 schema after
+// Generated-compatible Supabase type snapshot for the PayProof schema after
 // 20260905130000. Regenerate from a linked project with `npm run db:types`.
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];

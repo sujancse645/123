@@ -14,11 +14,11 @@ export function WorkingSchedulesView() {
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
   const canCreate = ['hr_manager', 'payroll_user', 'payroll_manager', 'admin'].includes(currentRole);
 
-  React.useEffect(()=>{queueMicrotask(()=>{try{const stored=localStorage.getItem('peoplepay360-local-work-schedules');if(stored){const local=JSON.parse(stored) as WorkingSchedule[];setSchedules(current=>[...local,...current.filter(item=>!local.some(saved=>saved.id===item.id))])}}catch{/* keep seeded schedules */}})},[]);
+  React.useEffect(()=>{queueMicrotask(()=>{try{const stored=localStorage.getItem('payproof-local-work-schedules');if(stored){const local=JSON.parse(stored) as WorkingSchedule[];setSchedules(current=>[...local,...current.filter(item=>!local.some(saved=>saved.id===item.id))])}}catch{/* keep seeded schedules */}})},[]);
 
   const handleCreated = (schedule: WorkingSchedule) => {
     setSchedules((current) => [schedule, ...current]);
-    if(schedule.id.startsWith('local-')){try{const existing=JSON.parse(localStorage.getItem('peoplepay360-local-work-schedules')??'[]') as WorkingSchedule[];localStorage.setItem('peoplepay360-local-work-schedules',JSON.stringify([schedule,...existing.filter(item=>item.id!==schedule.id)].slice(0,50)))}catch{/* in-memory schedule remains available */}}
+    if(schedule.id.startsWith('local-')){try{const existing=JSON.parse(localStorage.getItem('payproof-local-work-schedules')??'[]') as WorkingSchedule[];localStorage.setItem('payproof-local-work-schedules',JSON.stringify([schedule,...existing.filter(item=>item.id!==schedule.id)].slice(0,50)))}catch{/* in-memory schedule remains available */}}
     setExpandedId(schedule.id);
     showToast('success', 'Work schedule created', `${schedule.name} is ready for attendance calculation.`);
   };

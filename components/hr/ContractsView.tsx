@@ -26,7 +26,7 @@ import { WORKING_SCHEDULES } from '@/lib/mock-data/departments-schedules';
 export function ContractsView() {
   const { employees } = useApp();
   const [contractsList, setContractsList] = useState<Contract[]>(() => {
-    try { const stored=JSON.parse(localStorage.getItem('peoplepay360-local-contracts')??'[]') as Contract[]; return [...stored,...CONTRACTS.filter(item=>!stored.some(saved=>saved.id===item.id))]; } catch { return CONTRACTS; }
+    try { const stored=JSON.parse(localStorage.getItem('payproof-local-contracts')??'[]') as Contract[]; return [...stored,...CONTRACTS.filter(item=>!stored.some(saved=>saved.id===item.id))]; } catch { return CONTRACTS; }
   });
   const [isCreateOpen,setIsCreateOpen]=useState(false);
   const [scheduleOptions,setScheduleOptions]=useState(WORKING_SCHEDULES);
@@ -34,7 +34,7 @@ export function ContractsView() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
-  React.useEffect(()=>{queueMicrotask(()=>{try{const stored=JSON.parse(localStorage.getItem('peoplepay360-local-work-schedules')??'[]') as typeof WORKING_SCHEDULES;setScheduleOptions([...stored,...WORKING_SCHEDULES.filter(item=>!stored.some(saved=>saved.id===item.id))]);}catch{/* seeded schedules remain available */}})},[]);
+  React.useEffect(()=>{queueMicrotask(()=>{try{const stored=JSON.parse(localStorage.getItem('payproof-local-work-schedules')??'[]') as typeof WORKING_SCHEDULES;setScheduleOptions([...stored,...WORKING_SCHEDULES.filter(item=>!stored.some(saved=>saved.id===item.id))]);}catch{/* seeded schedules remain available */}})},[]);
 
   // Filter
   const filtered = contractsList.filter((c) => {
@@ -63,7 +63,7 @@ export function ContractsView() {
     if(!employee)return;
     const contract:Contract={id:`local-contract-${Date.now()}`,employeeId:employee.id,employeeName:employee.name,contractReference:`CNT-DEMO-${Date.now().toString().slice(-6)}`,wage:newContract.wage,wageMonthly:newContract.wage,wageAnnual:newContract.wage*12,startDate:newContract.startDate,endDate:newContract.endDate||undefined,department:employee.departmentName,jobPosition:employee.jobPosition,salaryStructureId:'str-1',salaryStructureName:employee.salaryStructureName||'Standard Corporate Salary Structure',workingScheduleId:newContract.workingScheduleId,workingScheduleName:schedule?.name||'Company Default',status:newContract.status,isActive:newContract.status==='running'};
     setContractsList(current=>[contract,...current]);
-    try { const stored=JSON.parse(localStorage.getItem('peoplepay360-local-contracts')??'[]') as Contract[];localStorage.setItem('peoplepay360-local-contracts',JSON.stringify([contract,...stored])); } catch {/* in-memory fallback */}
+    try { const stored=JSON.parse(localStorage.getItem('payproof-local-contracts')??'[]') as Contract[];localStorage.setItem('payproof-local-contracts',JSON.stringify([contract,...stored])); } catch {/* in-memory fallback */}
     setNewContract({employeeId:'',workingScheduleId:'',startDate:new Date().toISOString().slice(0,10),endDate:'',wage:50000,status:'draft'});setIsCreateOpen(false);
   };
 

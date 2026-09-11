@@ -34,7 +34,7 @@ interface SemanticIconTileProps {
 }
 
 /**
- * Purposeful semantic icon tile system for PeoplePay360.
+ * Purposeful semantic icon tile system for PayProof.
  * Replaces repeated solid purple tiles with a deliberate, accessible operational color palette.
  */
 export function SemanticIconTile({

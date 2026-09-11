@@ -154,7 +154,7 @@ export function RolePermissionsMatrixView() {
           Role-Based Access Control (RBAC) Matrix
         </h2>
         <p className="text-xs text-[#74717A] mt-0.5">
-          Enterprise permission segregation across standard user personas in PeoplePay360.
+          Enterprise permission segregation across standard user personas in PayProof.
         </p>
       </div>
 

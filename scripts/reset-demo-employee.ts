@@ -15,8 +15,8 @@ async function resetDemoEmployee() {
   console.log('Resetting prototype demo employee (Arjun Kumar)...');
 
   const companyId = process.env.NEXT_PUBLIC_DEMO_COMPANY_ID || '00000000-0000-4000-8000-000000000001';
-  const orgEmail = 'arjun.kumar@peoplepay360.test';
-  const personalEmail = 'arjun.demo@peoplepay360.test';
+  const orgEmail = 'arjun.kumar@payproof.test';
+  const personalEmail = 'arjun.demo@payproof.test';
 
   // 1. Delete existing auth user if present
   const { data: users } = await supabase.auth.admin.listUsers();

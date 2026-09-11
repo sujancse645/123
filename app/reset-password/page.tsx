@@ -54,7 +54,7 @@ export default function ResetPasswordPage() {
         <div className="mb-7 flex items-center gap-3">
           <PeoplePayLogo size={44} />
           <div>
-            <p className="text-lg font-bold text-[#28262D]">PeoplePay360</p>
+            <p className="text-lg font-bold text-[#28262D]">PayProof</p>
             <p className="text-xs text-[#74717A]">Set New Password</p>
           </div>
         </div>
@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
         ) : (
           <>
             <h1 className="text-2xl font-bold tracking-tight text-[#28262D]">{isInvitation?'Create your password':'Set a new password'}</h1>
-            <p className="mt-1 text-sm text-[#74717A]">{isInvitation?'Create your password, then sign in to complete your employee profile.':'Choose a strong password for your PeoplePay360 account.'}</p>
+            <p className="mt-1 text-sm text-[#74717A]">{isInvitation?'Create your password, then sign in to complete your employee profile.':'Choose a strong password for your PayProof account.'}</p>
 
             <form className="mt-6 space-y-4" onSubmit={submit}>
               <label className="block text-sm font-semibold text-[#3D3940]" htmlFor="new-password">

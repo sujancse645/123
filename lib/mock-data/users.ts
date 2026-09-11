@@ -4,7 +4,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'usr-1',
     name: 'Rohan Sharma',
-    email: 'rohan.sharma@peoplepay360.internal',
+    email: 'rohan.sharma@payproof.internal',
     role: 'employee',
     roleTitle: 'Employee',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
@@ -15,7 +15,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'usr-2',
     name: 'Priya Sundaram',
-    email: 'priya.sundaram@peoplepay360.internal',
+    email: 'priya.sundaram@payproof.internal',
     role: 'hr_manager',
     roleTitle: 'HR Manager',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
@@ -26,7 +26,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'usr-3',
     name: 'Neha Gupta',
-    email: 'neha.gupta@peoplepay360.internal',
+    email: 'neha.gupta@payproof.internal',
     role: 'payroll_user',
     roleTitle: 'HR Payroll User',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
@@ -37,7 +37,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'usr-4',
     name: 'Rajesh Kulkarni',
-    email: 'rajesh.kulkarni@peoplepay360.internal',
+    email: 'rajesh.kulkarni@payproof.internal',
     role: 'payroll_manager',
     roleTitle: 'HR Payroll Manager',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
@@ -48,7 +48,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'usr-5',
     name: 'Sudeesh K',
-    email: 'sudeesh.k@peoplepay360.internal',
+    email: 'sudeesh.k@payproof.internal',
     role: 'admin',
     roleTitle: 'Admin',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',

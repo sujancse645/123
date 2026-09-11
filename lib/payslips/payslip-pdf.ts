@@ -20,7 +20,7 @@ async function imageData(path:string){
   try { const blob=await fetch(path).then(r=>r.ok?r.blob():Promise.reject()); return await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(blob)}); } catch { return undefined; }
 }
 
-export async function buildPayslipPdf(ps:Payslip, employee:Employee, company={legalName:'PeoplePay360 Technologies Private Limited',address:'Bengaluru, Karnataka, India'}, logoDataUrl?:string) {
+export async function buildPayslipPdf(ps:Payslip, employee:Employee, company={legalName:'PayProof Technologies Private Limited',address:'Bengaluru, Karnataka, India'}, logoDataUrl?:string) {
   const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
   const plum:[number,number,number]=[113,75,103]; const ink:[number,number,number]=[47,47,51]; const grey:[number,number,number]=[116,116,122];
   const logo=logoDataUrl ?? (typeof window !== 'undefined' ? await imageData('/logo.png') : undefined);

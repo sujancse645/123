@@ -12,7 +12,7 @@ export function LoginTransition() {
           <span className="absolute -right-1 bottom-1 grid h-7 w-7 place-items-center rounded-full bg-[#438A6B] text-white shadow-md"><Check className="h-4 w-4" /></span>
         </div>
         <h1 className="mt-6 text-2xl font-semibold text-[#28262D]">Welcome back</h1>
-        <p className="mt-1 text-sm text-[#74717A]">Preparing your PeoplePay360 workspace…</p>
+        <p className="mt-1 text-sm text-[#74717A]">Preparing your PayProof workspace…</p>
         <span className="mt-5 h-1 w-44 overflow-hidden rounded-full bg-[#E4E1E5]" aria-hidden="true"><span className="login-progress block h-full rounded-full bg-[#714B67]" /></span>
       </div>
     </div>

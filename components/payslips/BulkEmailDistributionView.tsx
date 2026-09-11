@@ -44,7 +44,7 @@ export function BulkEmailDistributionView() {
 
   // Pre-send configuration state
   const [selectedPayrunId, setSelectedPayrunId] = useState<string>('pr-202608');
-  const [emailSubject, setEmailSubject] = useState<string>('Confidential: Your PeoplePay360 Payslip for August 2026');
+  const [emailSubject, setEmailSubject] = useState<string>('Confidential: Your PayProof Payslip for August 2026');
   const [isSimulatingSend, setIsSimulatingSend] = useState<boolean>(false);
   const [isRetrying, setIsRetrying] = useState<boolean>(false);
 
@@ -346,7 +346,7 @@ export function BulkEmailDistributionView() {
             </div>
             <div className="flex justify-between border-b border-[#E4E1E5] pb-2">
               <span className="font-bold text-[#28262D]">Sender:</span>
-              <span className="font-medium text-[#74717A]">PeoplePay360 Payroll &lt;payroll@peoplepay360.internal&gt;</span>
+              <span className="font-medium text-[#74717A]">PayProof Payroll &lt;payroll@payproof.internal&gt;</span>
             </div>
             <div className="pt-2 text-[#74717A] leading-relaxed">
               <p>Dear &#123;&#123;Employee_Name&#125;&#125;,</p>

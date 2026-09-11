@@ -18,7 +18,7 @@ import { SALARY_STRUCTURES } from '@/lib/mock-data/payroll';
 import { formatINR } from '@/lib/utils';
 import { CONTRACTS } from '@/lib/mock-data/contracts';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { peoplePayQueries } from '@/lib/supabase/peoplepay360_supabase_queries';
+import { peoplePayQueries } from '@/lib/supabase/payproof_supabase_queries';
 import { logLocalFallback } from '@/lib/demo/local-fallback';
 
 export function PayrunWizardModal() {

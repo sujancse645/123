@@ -1,80 +1,77 @@
-# PeoplePay360
+# PayProof
 
-**Explainable HR and Payroll Management Platform**
+**Every rupee provable before payday.**
 
-PeoplePay360 is a role-based HR and payroll platform that connects employee records, contracts, attendance, leave, salary structures, payruns, and payslips in one interface.
+PayProof is an Odoo-integrated HR and payroll platform that catches payroll errors and fraud before disbursal, and explains every rupee of an employee's salary in their own language.
 
-The platform helps employees understand their salary and leave impact while helping HR and payroll teams identify errors before payment. Its core idea is simple: **every salary should be calculated correctly, verified before payment, and clearly explained to the employee.**
+![Next.js 15](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
+![Odoo 17](https://img.shields.io/badge/Odoo-17-714B67?logo=odoo&logoColor=white)
 
-> Current status: the original demo UI is now accompanied by an additive Supabase compatibility layer, protected employee-invitation and onboarding routes, atomic leave/loan/payroll RPCs, private document exports, and domain regression tests. Some legacy screens still use deterministic mock state until a Supabase project is linked and seeded.
+*Note: See the "What's real vs what's stubbed" section below for the current implementation state of all features.*
 
-## Problem
+## The problem
 
-Many organizations manage employee information, attendance, leave, contracts, and payroll in separate systems. This creates several problems:
+- Payroll errors discovered only after bank transfer → reprocessing costs ₹800–₹2,000 per reversal
+- Employees cannot verify their own salary → HR fields 40+ queries per payroll cycle
+- No single audit trail connecting attendance, leave, and payslip → compliance gaps during labour inspections
+- Statutory rules (PF/ESI/PT/TDS) hard-coded in spreadsheets → wrong deductions when slabs change
 
-- Incorrect or unexplained salary deductions
-- Duplicate payslips
-- Missing attendance and check-out records
-- Expired or overlapping contracts
-- Manual leave-balance calculations
-- Payroll errors discovered only after payment
-- Limited transparency for employees
+## How PayProof is different
 
-## Solution
+### Odoo-native integration
+XML-RPC to hr.employee, hr.contract, hr.leave, hr.payslip, hr.payslip.line; two-way sync.
+*Example: When HR creates a contract in Odoo, PayProof pulls it via XML-RPC and links it to the employee's attendance schedule within the same transaction.*
 
-PeoplePay360 brings the complete employee-to-payroll workflow into a single role-based application.
+### Pre-payment risk engine
+Readiness score + fraud checks: duplicate bank accounts, ghost employees, statistical salary outliers, duplicate payslips. Metric: "rupees flagged before disbursal".
+*Example: Before August payroll of ₹32,00,000 disbursal, the engine flags ₹1,45,000 across 3 employees — one duplicate bank account shared with a terminated employee, one salary 4.2σ above department median, one payslip generated twice.*
 
-Employees can mark attendance, request leave, view leave balances, estimate unpaid-leave deductions, and understand their salary breakdown. HR teams manage employees, contracts, schedules, attendance, and approvals. Payroll teams create payruns, review warnings, calculate payslips, and analyze payroll readiness.
-
-## Unique Value Proposition
-
-> **PeoplePay360 detects, explains, and simulates payroll changes before employees are paid.**
-
-The platform adds three differentiating capabilities:
-
-### Payroll Readiness Score
-
-Checks a payrun for issues such as:
-
-- Missing bank details
-- Missing, expired, or overlapping contracts
-- Duplicate payslips
-- Attendance exceptions
-- Leave conflicts
-- Unusual salary changes
-
-Each warning links to the affected employee or payslip.
-
-### Explainable Salary Difference
-
-Compares the current salary with the previous payslip and explains every change.
-
-Example:
-
-```text
-Previous net salary: ₹42,000
-Current net salary:  ₹39,550
-
-Unpaid leave deduction: -₹2,800
-Approved overtime:       +₹750
-Other deduction:         -₹400
-Total difference:      -₹2,450
-```
+### Explainable payslip with statutory rule citations
+PF/ESI/PT/TDS as effective-dated rules-as-code; every payslip line links to the rule version that produced it.
+*Example: Payslip line "EPF Employee — ₹1,800" links to rule PF-2024-v3 (effective 2024-04-01): 12% of min(Basic, ₹15,000).*
 
 ### Payroll Impact Simulator
+What-if on salary rules, department cost delta, affected employees, no change to live payroll.
+*Example: Payroll manager simulates increasing DA from 18% to 22%. Simulator shows: 142 employees affected, monthly cost rises by ₹4,26,800, Engineering dept +₹1,89,200.*
 
-Allows a payroll manager to preview the effect of a proposed change before applying it to actual payroll.
+## Grounded salary copilot
 
-The simulation can show:
+All amounts are computed deterministically by the payroll engine. The LLM only phrases the pre-computed JSON and cannot invent numbers. Available in English, Hindi, and Tamil.
 
-- Current and simulated payroll cost
-- Affected employees
-- Employee-level salary differences
-- Department-level cost impact
-- New warnings created by the change
-- Reasons for every calculated difference
+*Example:*
+**Engine JSON:** `{"basic": 40000, "hra": 20000, "lwp_days": 2, "lwp_deduction": 4000, "net": 56000}`
+**Natural Language (English):** "Your net pay is ₹56,000. This includes ₹40,000 Basic and ₹20,000 HRA, minus a ₹4,000 deduction for 2 days of leave without pay."
 
-## User Roles
+## Tamper-evident payroll ledger
+
+Hash-chained payslip versions and audit trail. Every payslip version carries a SHA-256 hash of its content and the previous version's hash, ensuring the integrity of historical payroll records.
+
+## Architecture
+
+```mermaid
+graph TD
+    UI[Next.js 15 Frontend] -->|REST / Realtime| Supabase
+    
+    subgraph Supabase [Supabase Data Layer]
+        Auth[Auth & RLS]
+        Storage[Private Storage]
+        
+        subgraph DB [PostgreSQL]
+            RPC1[record_attendance_with_location]
+            RPC2[preview_leave_impact_v2]
+            RPC3[calculate_overtime_entry]
+            RPC4[prepare_payroll_bank_export]
+            RPC5[payroll_contract_eligibility]
+            RPC6[Other RPCs]
+        end
+    end
+    
+    Supabase <-->|XML-RPC| Odoo[Odoo 17]
+```
+
+## Roles and permissions
 
 | Role | Main permissions |
 |---|---|
@@ -84,365 +81,170 @@ The simulation can show:
 | HR Payroll Manager | Full payroll management, including payruns, draft payslips, salary structures, and salary rules |
 | Admin | Complete access to users, permissions, HR, attendance, leave, payroll, reports, integrations, and audit history |
 
-All internal roles also receive Employee Self-Service features for their own attendance, leave, salary, payslips, and profile.
+*Note: Employee Self-Service allows employees to independently manage their own profiles, attendance, and leave requests.*
 
-## Core Modules
+## Getting started
 
-### Employee Management
+Prerequisites: Node.js 20+, npm/pnpm/yarn/bun, Supabase CLI. Optional: Odoo 17 instance.
 
-- Employee Kanban, list, and detail views
-- Department, job position, manager, and employment status
-- Employee search and filtering
-- Active contract and contract history
-- Attendance and leave summaries
-
-### Attendance
-
-- Check-in and check-out experience
-- Live worked-hours summary
-- Attendance history and monthly calendar
-- Missing check-out and attendance exception states
-- Attendance correction requests
-- Face-verification interface prototype
-- External biometric-device integration interface
-
-The current face and fingerprint flows are frontend demonstrations. A production deployment requires secure enrollment, consent, liveness checks, device APIs, and protected biometric data handling.
-
-### Leave Management
-
-- Paid and unpaid leave requests
-- Calendar-based date selection
-- Working-day calculation
-- Paid-leave balance preview
-- Estimated unpaid-leave deduction
-- Leave approval workflow
-- Leave allocations and time-off types
-
-When selected leave exceeds the available paid balance, the interface separates paid and unpaid days and displays an estimated salary impact in Indian rupees.
-
-### Contracts and Working Schedules
-
-- Contract history
-- Active contract indicator
-- Wage and salary-structure information
-- Missing and overlapping-contract warnings
-- Weekly working schedules
-- Start time, end time, break, and total hours
-
-### Payroll
-
-- Two-step payrun wizard
-- Eligible employee selection
-- Draft payroll computation interface
-- Payslip review
-- Compute, Validate, Mark Paid, Generate PDF, and Send Payslips actions
-- Salary structures
-- Sequential salary rules
-- Payroll warnings and readiness checks
-
-### Reports and Dashboard
-
-- Total net salary
-- Payslips generated
-- Average salary
-- Salary cost by department
-- Monthly payroll trend
-- Attendance health
-- Leave overview
-- Payroll status distribution
-- Department headcount and payroll cost
-- Filters by period, department, employee type, status, and salary structure
-
-## Leave Salary-Impact Preview
-
-The frontend demonstrates the following estimate:
-
-```text
-Estimated deduction = Eligible monthly salary / Payable working days × Unpaid leave days
-```
-
-Example:
-
-```text
-Selected working days:       5
-Available paid leave:        3 days
-Paid leave used:             3 days
-Unpaid leave:                2 days
-Estimated deduction per day: ₹1,167
-Estimated total deduction:   ₹2,334
-```
-
-The UI labels this value as an estimate. The final amount must come from the connected payroll rules and backend calculation service.
-
-## Frontend Technology
-
-- [Next.js 15](https://nextjs.org/)
-- TypeScript
-- Tailwind CSS
-- shadcn/ui
-- Lucide React
-- Recharts
-- Framer Motion
-
-## Design System
-
-The visual identity is inspired by Odoo's professional plum palette while using an original application layout.
-
-| Purpose | Color |
-|---|---|
-| Primary plum | `#714B67` |
-| Deep plum | `#4D3348` |
-| Muted lavender | `#A4879F` |
-| Warm yellow | `#F4C430` |
-| Warm white | `#FBFAFB` |
-| Surface white | `#FFFFFF` |
-| Border grey | `#E4E1E5` |
-| Primary text | `#28262D` |
-| Success | `#438A6B` |
-| Warning | `#D49525` |
-| Error | `#C85A54` |
-
-The interface uses restrained glass effects, accessible contrast, responsive cards, clear data tables, meaningful status colors, and subtle motion.
-
-## Project Structure
-
-```text
-app/                         Next.js routes and layouts
-components/
-├── attendance/             Attendance and verification UI
-├── dashboard/              KPI cards, charts, and summaries
-├── employees/              Employee management UI
-├── leave/                  Leave request and impact preview
-├── payroll/                Payruns, payslips, and simulation
-└── shared/                 Reusable navigation, dialogs, and tables
-hooks/                       Reusable React hooks
-lib/
-├── mock-data/              Demonstration records
-├── services/               Replaceable frontend service layer
-├── types/                  TypeScript domain interfaces
-└── utils/                  Formatting and calculation helpers
-public/                      Static assets
-```
-
-The exact folders may vary as development progresses. Keep UI components separate from data services so mock functions can later be replaced with backend APIs.
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 20 or later
-- npm, pnpm, yarn, or bun
-
-### Installation
-
+1. Clone the repository and install dependencies:
 ```bash
-git clone <YOUR_REPOSITORY_URL>
-cd PeoplePay360
+git clone https://github.com/sujancse645/123.git
+cd PayProof
 npm install
 ```
 
-### Run the development server
+2. Create a `.env` file with the following environment variables:
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_SECRET_KEY=
+BANK_DATA_ENCRYPTION_KEY=replace_with_a_long_random_secret
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_DEMO_COMPANY_ID=00000000-0000-0000-0000-000000000001
+ALLOW_DEMO_SEED=false
+DEMO_COMPANY_NAME=PayProof Demo Private Limited
+DEMO_DEFAULT_PASSWORD=PayProof@360
+EMAIL_PROVIDER=console
+EMAIL_DELIVERY_WEBHOOK_URL=
+EMAIL_DELIVERY_WEBHOOK_SECRET=
+GMAIL_CLIENT_ID=
+GMAIL_CLIENT_SECRET=
+GMAIL_REFRESH_TOKEN=
+EMAIL_FROM=
+ODOO_URL=https://your-instance.odoo.com
+ODOO_DB=your_database
+ODOO_USERNAME=api_user@example.com
+ODOO_API_KEY=your_odoo_api_key
+```
 
+3. Run migrations in the following order:
+- `20260905120000_payproof_compatibility_extensions.sql`
+- `20260905121000_payproof_atomic_workflows.sql`
+- `20260905122000_payproof_rls_views.sql`
+- `20260905123000_payproof_calculation_rpcs.sql`
+- `20260905124000_payproof_work_schedule_rpc.sql`
+- `20260905130000_payproof_missing_features.sql`
+- `20260905140000_payproof_account_lifecycle.sql`
+- `20260906100000_payproof_biometric_contract_payroll.sql`
+- `20260906110000_demo_mailbox_compatibility.sql`
+- `20260906120000_profile_photos_bucket_compatibility.sql`
+
+4. Generate TypeScript types and run regression tests:
+```bash
+npm run db:types
+# Run pgTAP tests in Supabase
+```
+
+5. To connect to Odoo, update the `ODOO_*` variables in your `.env` file with your instance details.
+
+6. Start the development server or build for production:
 ```bash
 npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Production build
-
-```bash
+# or
 npm run build
-npm start
 ```
 
-## Demo Accounts
+## Demo script
 
-The frontend should provide role-selection cards or sample credentials for these accounts:
+1. **0:00–0:30** — Login as employee, show dashboard
+2. **0:30–1:00** — Check in, view attendance
+3. **1:00–1:30** — Request leave exceeding paid balance, see salary impact preview with ₹ amounts
+4. **1:30–2:00** — Switch to HR Manager, approve leave, create payrun
+5. **2:00–2:30** — View payroll readiness score, review warnings
+6. **2:30–3:00** — Open payslip, show explainable salary breakdown with rule citations
+7. **3:00–3:30** — Show audit trail, PDF download
+8. **3:30–4:00** — Open Payroll Impact Simulator, simulate DA increase, review cost delta
 
-| Demo user | Role |
+## What's real vs what's stubbed
+
+| Capability | Status |
 |---|---|
-| Employee Demo | Employee |
-| HR Manager Demo | HR Manager |
-| Payroll User Demo | HR Payroll User |
-| Payroll Manager Demo | HR Payroll Manager |
-| Admin Demo | Admin |
+| Supabase Auth + RLS (5 roles) | Shipped. Server-side session, role-checked RPCs, row-level policies. |
+| Attendance with geofence + location verification | Shipped. RPC `record_attendance_with_location` computes Haversine distance. |
+| Leave impact preview with sandwich-leave detection | Shipped. RPC `preview_leave_impact_v2` with policy lookup. |
+| Overtime calculation | Shipped. RPC `calculate_overtime_entry` with policy caps and rounding. |
+| Loan payment ledger (immutable) | Shipped. Trigger-enforced append-only `loan_payments` table. |
+| Contract lifecycle management | Shipped. RPCs `refresh_contract_statuses`, `assign_employee_contract`, `payroll_contract_eligibility`. |
+| Bank export preparation | Shipped. RPC `prepare_payroll_bank_export` with SHA-256 checksum. |
+| Salary structure template validation | Shipped. RPC `validate_salary_template_version` with circular-dependency detection. |
+| Work schedule creation | Shipped. RPC `create_work_schedule` with segments. |
+| PDF payslip generation + signed download | Shipped. A4 PDF with SHA-256 file checksum. |
+| Payroll readiness UI | Frontend only. Scores are hardcoded (85/88/100), not computed from data. |
+| Explainable salary difference UI | Frontend only. Static modal with fixed values. |
+| Payroll Impact Simulator UI | Frontend only. DB tables exist, no backend simulation RPC. |
+| Odoo XML-RPC integration | Not started. No XML-RPC client in codebase. Service layer ready for connection. |
+| Pre-payment fraud checks | Not started. No duplicate-bank, ghost-employee, or outlier detection logic. |
+| Statutory rule versioning (PF/ESI/PT/TDS) | Partial. PF calculation exists in mock JS. No effective-dated rule engine or version linkage on payslip lines. |
+| Grounded salary copilot (LLM) | Not started. `@google/genai` in package.json but unused. No Hindi/Tamil generation. |
+| Hash-chained payslip versions | Not started. Individual PDF checksums exist. No inter-record hash chain. |
+| Email delivery | Webhook adapter built. No provider credentials configured. |
+| pgTAP regression tests | Shipped. 16 assertions across RLS policies and encrypted columns. |
+| Vitest domain + service tests | Shipped. 4 test suites covering leave, overtime, loans, contracts. |
 
-Replace this section with the final demonstration credentials before submission. Never commit real passwords or employee information.
+## Tech stack, project structure, team, license
 
-## Suggested Demo Flow
+**Tech Stack:** Next.js 15, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Supabase (Postgres + Auth + Storage), Recharts, Framer Motion, jsPDF, Vitest, pgTAP, Zod.
 
-### Flow 1: Attendance to Payslip
+**PayProof Design System:**
+Inspired by Odoo's plum palette.
 
-1. Employee completes the mock face-verification check-in.
-2. Attendance is displayed on the employee dashboard.
-3. Payroll user creates a payrun and selects eligible employees.
-4. The system displays payroll warnings and a readiness score.
-5. Payroll is computed and the employee's payslip is opened.
-6. The salary explanation shows the source of every amount.
+| Purpose | Color |
+|---|---|
+| Primary plum | #714B67 |
+| Deep plum | #4D3348 |
+| Muted lavender | #A4879F |
+| Warm yellow | #F4C430 |
+| Warm white | #FBFAFB |
+| Surface white | #FFFFFF |
+| Border grey | #E4E1E5 |
+| Primary text | #28262D |
+| Success | #438A6B |
+| Warning | #D49525 |
+| Error | #C85A54 |
 
-### Flow 2: Leave to Salary Impact
-
-1. Employee opens the leave calendar.
-2. The employee selects dates exceeding the paid-leave balance.
-3. PeoplePay360 separates paid and unpaid days.
-4. The interface displays the estimated salary deduction.
-5. HR approves the request.
-6. The draft payslip is recomputed.
-7. The salary difference explains the unpaid-leave deduction.
-
-### WOW Moment: Payroll Simulation
-
-1. Payroll Manager changes a salary rule in Simulation mode.
-2. The simulator shows affected employees and total company cost.
-3. The actual payroll remains unchanged.
-4. The manager reviews the impact and submits the simulation for approval.
-
-## Current Scope
-
-The current project focuses on the frontend experience using realistic mock records and local state.
-
-Available in the frontend prototype:
-
-- Role-based dashboards
-- Employee Self-Service
-- Attendance and mock biometric flows
-- Leave and deduction-impact preview
-- Employee, contract, and schedule screens
-- Payrun and payslip workflows
-- Payroll Readiness Score
-- Explainable salary differences
-- Payroll Impact Simulator
-- Responsive reports and dashboards
-
-Implemented backend integration points:
-
-- Supabase Auth clients and server-only Admin API usage
-- Additive PostgreSQL migrations that preserve the original schema and data
-- Role-checked, transactional leave review, loan payment, attendance, and bank-export RPCs
-- Private profile-photo, payslip, and bank-export storage
-- Real A4 PDF generation and short-lived signed downloads
-- Protected email-provider webhook adapter with delivery tracking
-- Audit records for privileged workflows
-
-Still external or deployment-specific:
-
-- A linked Supabase project and production credentials
-- Email provider credentials and webhook implementation
-- Physical biometric-device integration and production face liveness verification
-- A scheduler for the contract lifecycle RPC
-- Migrating the remaining legacy demo screens from local state to live queries
-
-## Supabase compatibility and deployment
-
-The legacy bootstrap file at `sql/initialization_query.sql` is intentionally unchanged. Run it only for a fresh database. For an existing PeoplePay360 database, apply only the ordered files in `supabase/migrations/`:
-
+**Project Structure:**
 ```text
-20260905120000_peoplepay360_compatibility_extensions.sql
-20260905121000_peoplepay360_atomic_workflows.sql
-20260905122000_peoplepay360_rls_views.sql
-20260905123000_peoplepay360_calculation_rpcs.sql
+app/                         Next.js routes and layouts
+components/
+├── admin/                  Audit trail, role matrix, config
+├── application/            Main app shell
+├── attendance/             Check-in/out, verification
+├── auth/                   Login, enrollment pages
+├── brand/                  Logo component
+├── dashboard/              KPI cards, charts
+├── hr/                     Employee, contract, schedule management
+├── leave/                  Leave request and impact preview
+├── loans/                  Employee loan management
+├── payroll/                Payruns, payslips, simulation, reports
+├── payslips/               Payslip detail, bulk email, breakdown
+├── profile/                Employee profile
+├── shared/                 Reusable navigation, dialogs, tables
+└── shell/                  Sidebar, breadcrumbs, role switcher
+hooks/                       Reusable React hooks
+lib/
+├── auth/                   Demo credentials
+├── context/                App-wide state (AppContext)
+├── demo/                   Local fallback storage
+├── domain/                 Business logic + tests
+├── exports/                PDF/CSV generation
+├── mock-data/              Demonstration records
+├── payslips/               Payslip PDF builder
+├── server/                 Server-only utilities (encryption)
+├── services/               Replaceable service layer + tests
+├── supabase/               DB types, query helpers
+├── types/                  TypeScript domain interfaces
+└── utils.ts                Formatting helpers
+scripts/                     Seed and reset scripts
+sql/                         Legacy bootstrap SQL
+supabase/
+├── migrations/             Ordered migration files
+├── seed.sql                Demo seed data
+└── tests/                  pgTAP regression tests
 ```
 
-The first migration safely backfills contract lifecycle values without removing `is_active`:
-
-```text
-is_active = true                         -> running
-is_active = false and start_date future -> scheduled
-is_active = false and end_date past     -> expired
-otherwise                               -> draft
-```
-
-After linking the Supabase CLI, regenerate the checked-in database type snapshot:
-
-```bash
-supabase link --project-ref <project-ref>
-npm run db:types
-```
-
-Run `supabase/tests/rls_policy_regression.sql` with pgTAP after applying migrations. It verifies that the original Employee, HR, Payroll User, Payroll Manager, and Admin policy paths still exist and that sensitive encrypted columns are not broadly selectable.
-
-## Future Odoo Integration
-
-The frontend service layer can later connect with Odoo modules for:
-
-- Employees
-- Contracts
-- Working schedules
-- Attendance
-- Time Off
-- Payroll
-- Salary structures
-- Salary rules
-- Payruns and payslips
-
-All permissions, salary calculations, leave deductions, payroll validation, and biometric verification must be enforced by the backend. Frontend role visibility alone is not a security control.
-
-## Privacy and Security Considerations
-
-- Mask bank-account details by default.
-- Do not store real biometric images in frontend storage.
-- Request camera access only after an explicit employee action.
-- Stop the camera when verification closes.
-- Do not commit passwords, employee documents, salary records, or secrets.
-- Require backend authorization for payroll and employee records.
-- Maintain audit history for attendance, leave, profile, and payroll changes.
-- Use employee forecasts only for staffing assistance, with human review.
-
-## Team Collaboration
-
-Use short feature branches and pull requests so every contribution is visible.
-
-Example branches:
-
-```text
-feat/employee-dashboard
-feat/attendance-verification
-feat/leave-impact-preview
-feat/payroll-readiness
-feat/payroll-simulator
-feat/admin-dashboard
-```
-
-Use meaningful commits:
-
-```text
-feat: add unpaid leave deduction preview
-feat: create payroll readiness dashboard
-fix: preserve leave form after validation error
-refactor: move mock payroll data into service layer
-```
-
-## Contributing
-
-1. Create a feature branch.
-2. Implement and test the feature.
-3. Commit with a meaningful message.
-4. Push the branch.
-5. Open a pull request.
-6. Request review from another team member.
-7. Merge after review and conflict resolution.
-
-## Roadmap
-
-- [x] Define roles and module access
-- [x] Design employee and payroll workflows
-- [x] Add leave salary-impact experience
-- [x] Define Payroll Readiness and Impact Simulator
-- [ ] Complete responsive frontend implementation
-- [ ] Connect Odoo backend services
-- [ ] Integrate attendance-device events
-- [ ] Add secure face verification
-- [ ] Generate real payslip PDFs
-- [ ] Add email delivery
-- [ ] Add automated tests and deployment workflow
-
-Update the roadmap checkboxes to match the repository's actual implementation before submission.
-
-## Team
-
-Add the final team information here:
-
+**Team:**
 | Member | Responsibility |
 |---|---|
 | Team Member 1 | Project lead and integration |
@@ -452,14 +254,6 @@ Add the final team information here:
 | Team Member 5 | Dashboards and reports |
 | Team Member 6 | Testing, documentation, and demo |
 
-## Hackathon
+License: MIT
 
-Developed for **Odoo Hackathon 2026** under the **PeoplePay360 HR & Payroll** problem statement.
-
-## License
-
-Add the license selected by the team before public distribution. If no license is included, the repository remains protected by default copyright rules.
-
----
-
-**PeoplePay360 — Accurate payroll. Clear explanations. Confident decisions.**
+**PayProof — Every rupee provable before payday.**

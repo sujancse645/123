@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
         <div className="mb-7 flex items-center gap-3">
           <PeoplePayLogo size={44} />
           <div>
-            <p className="text-lg font-bold text-[#28262D]">PeoplePay360</p>
+            <p className="text-lg font-bold text-[#28262D]">PayProof</p>
             <p className="text-xs text-[#74717A]">Password Recovery</p>
           </div>
         </div>

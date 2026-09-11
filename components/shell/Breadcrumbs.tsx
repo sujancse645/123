@@ -74,7 +74,7 @@ export function Breadcrumbs() {
         className="hover:text-[#714B67] flex items-center gap-1 transition-colors"
       >
         <Home className="w-3.5 h-3.5" />
-        <span>PeoplePay360</span>
+        <span>PayProof</span>
       </button>
       <ChevronRight className="w-3.5 h-3.5 text-[#E4E1E5]" />
       <span>{getSection()}</span>

@@ -27,7 +27,7 @@ export function LoginPage() {
     event.preventDefault();
     setError('');
     if (isEmployeeDemoLogin(email, password)) {
-      sessionStorage.setItem('peoplepay360-demo-session', 'employee');
+      sessionStorage.setItem('payproof-demo-session', 'employee');
       setSubmitting(true);
       setAuthenticated(true);
       router.prefetch('/demo');
@@ -131,7 +131,7 @@ export function LoginPage() {
           <div className="mb-7 flex items-center gap-3">
             <PeoplePayLogo size={44} />
             <div>
-              <p className="text-lg font-bold text-[#28262D]">PeoplePay360</p>
+              <p className="text-lg font-bold text-[#28262D]">PayProof</p>
               <p className="text-xs text-[#74717A]">HR & Payroll Management</p>
             </div>
           </div>

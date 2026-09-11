@@ -1,5 +1,5 @@
 export const EMPLOYEE_DEMO_CREDENTIALS = {
-  email: 'employee@peoplepay360.demo',
+  email: 'employee@payproof.demo',
   password: 'Demo@123',
 } as const;
 

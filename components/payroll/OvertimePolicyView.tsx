@@ -3,7 +3,7 @@ import React from 'react';
 import { Clock3,Save,ShieldCheck } from 'lucide-react';
 import { useApp } from '@/lib/context/app-context';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { peoplePayQueries } from '@/lib/supabase/peoplepay360_supabase_queries';
+import { peoplePayQueries } from '@/lib/supabase/payproof_supabase_queries';
 import { readLocalData, writeLocalData } from '@/lib/demo/local-fallback';
 
 export function OvertimePolicyView(){

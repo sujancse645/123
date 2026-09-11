@@ -106,7 +106,7 @@ export default function CompleteProfilePage() {
             setEmployeeDetails({
               employeeCode: emp.employee_code ?? 'EMP-NEW',
               companyEmail: emp.company_email ?? user.email,
-              companyName: emp.companies?.name ?? 'PeoplePay360',
+              companyName: emp.companies?.name ?? 'PayProof',
               departmentName: emp.departments?.name ?? 'Engineering',
               positionTitle: emp.job_positions?.title ?? 'Software Engineer',
               employmentCategory: 'full_time',

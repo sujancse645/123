@@ -9,7 +9,7 @@ interface LogoProps {
 }
 
 /**
- * PeoplePayLogo - Original enterprise brand mark for PeoplePay360
+ * PeoplePayLogo - Original enterprise brand mark for PayProof
  * Concept:
  * - Rounded square container in rich plum (#714B67)
  * - Three connected node-figures in warm yellow (#F4C430) and clean white,
@@ -20,7 +20,7 @@ export function PeoplePayLogo({ size = 36, className }: LogoProps) {
   return (
     <img
       src="/logo.png"
-      alt="PeoplePay360 Logo"
+      alt="PayProof Logo"
       width={size}
       height={size}
       className={cn('shrink-0 select-none object-contain transition-transform duration-150', className)}
@@ -87,7 +87,7 @@ export function SidebarBrand({ isCollapsed, onClick, className }: SidebarBrandPr
         isCollapsed ? 'justify-center w-full' : 'min-w-0 flex-1',
         className
       )}
-      title="PeoplePay360"
+      title="PayProof"
     >
       <PeoplePayLogo size={36} />
       {!isCollapsed && (

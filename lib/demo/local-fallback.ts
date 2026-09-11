@@ -11,11 +11,11 @@ export interface LocalFallbackEvent {
   databaseFailure?: string;
 }
 
-const EVENT_KEY = 'peoplepay360-local-audit-log';
-const ONBOARDING_KEY = 'peoplepay360-local-onboarding-complete';
-const INVITATION_KEY = 'peoplepay360-local-invitations';
-const ACTIVE_INVITATION_KEY = 'peoplepay360-active-local-invitation';
-const DATA_PREFIX = 'peoplepay360-local-data-';
+const EVENT_KEY = 'payproof-local-audit-log';
+const ONBOARDING_KEY = 'payproof-local-onboarding-complete';
+const INVITATION_KEY = 'payproof-local-invitations';
+const ACTIVE_INVITATION_KEY = 'payproof-active-local-invitation';
+const DATA_PREFIX = 'payproof-local-data-';
 
 export interface LocalInvitation {token:string;fullName:string;personalEmail:string;joiningDate:string;employmentCategory:string;createdAt:string;passwordCreatedAt?:string;profile?:Record<string,unknown>}
 

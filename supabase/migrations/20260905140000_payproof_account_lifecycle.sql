@@ -1,4 +1,4 @@
--- Migration: 20260905140000_peoplepay360_account_lifecycle.sql
+-- Migration: 20260905140000_payproof_account_lifecycle.sql
 -- Description: Supports full HR-created employee lifecycle states, invitations outbox, and onboarding verification tracking.
 
 -- 1. Extend onboarding_status enum values safely

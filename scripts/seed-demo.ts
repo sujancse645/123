@@ -44,7 +44,7 @@ async function runSeed() {
     process.exit(1);
   }
 
-  console.log('🚀 Starting PeoplePay360 Demo Seed Script...');
+  console.log('🚀 Starting PayProof Demo Seed Script...');
   try {
     await seedDemoUsers(url, key);
     await seedDemoData(url, key);

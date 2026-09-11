@@ -32,11 +32,11 @@ export function PayrollReportsView() {
   });
   const handleDownload = (reportName: 'master'|'disbursal'|'pf'|'pt'|'bank') => {
     if (reportName === 'master' || reportName === 'disbursal') {
-      downloadCsv(reportName === 'master' ? 'PeoplePay360_Master_Payroll_Aug_2026.csv' : 'Disbursal_Register_Aug_2026.csv', ['Employee ID','Employee Name','Department','Gross Salary','Total Deductions','Net Payable','Bank Details'], payrollRows);
+      downloadCsv(reportName === 'master' ? 'PayProof_Master_Payroll_Aug_2026.csv' : 'Disbursal_Register_Aug_2026.csv', ['Employee ID','Employee Name','Department','Gross Salary','Total Deductions','Net Payable','Bank Details'], payrollRows);
     } else if (reportName === 'bank') {
       downloadCsv('Salary_NEFT_Batch_Aug_2026.csv', ['Employee ID','Employee Name','Account','IFSC','Net Pay','Payment Reference','Narration'], employees.filter((employee) => employee.bankAccountMasked).map((employee,index) => [employee.employeeId,employee.name,employee.bankAccountMasked,employee.ifscCode,(employee.baseSalary||65000)-2000,`PP360-AUG-${String(index+1).padStart(3,'0')}`,'Salary August 2026']));
     } else {
-      downloadReportPdf({filename:reportName === 'pf' ? 'EPFO_Form_12A_Aug2026.pdf' : 'PT_Form_5_Aug2026.pdf',title:reportName === 'pf' ? 'EPFO Form 12A - Monthly Return' : 'Professional Tax Form 5',subtitle:'PeoplePay360 · August 2026',headers:['Employee ID','Employee','Department','Contribution'],rows:employees.map((employee) => [employee.employeeId,employee.name,employee.departmentName||employee.department,reportName === 'pf' ? 1800 : 200]),summary:reportName === 'pf' ? [`Employee PF total: INR ${totalEmployeePF}`,`Employer PF total: INR ${totalEmployerPF}`] : [`Professional Tax total: INR ${totalPT}`]});
+      downloadReportPdf({filename:reportName === 'pf' ? 'EPFO_Form_12A_Aug2026.pdf' : 'PT_Form_5_Aug2026.pdf',title:reportName === 'pf' ? 'EPFO Form 12A - Monthly Return' : 'Professional Tax Form 5',subtitle:'PayProof · August 2026',headers:['Employee ID','Employee','Department','Contribution'],rows:employees.map((employee) => [employee.employeeId,employee.name,employee.departmentName||employee.department,reportName === 'pf' ? 1800 : 200]),summary:reportName === 'pf' ? [`Employee PF total: INR ${totalEmployeePF}`,`Employer PF total: INR ${totalEmployerPF}`] : [`Professional Tax total: INR ${totalPT}`]});
     }
     addToast({
       title: 'Report Downloaded',

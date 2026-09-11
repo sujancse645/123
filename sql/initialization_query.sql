@@ -1,4 +1,4 @@
--- PeoplePay360: Supabase/PostgreSQL backend setup
+-- PayProof: Supabase/PostgreSQL backend setup
 -- Target: a fresh Supabase project. Run in the SQL Editor as the postgres owner.
 -- Money uses numeric, timestamps use timestamptz, and all exposed tables use RLS.
 

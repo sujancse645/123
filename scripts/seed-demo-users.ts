@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database, AppRole } from '../lib/supabase/database.types';
 
 export const DEMO_COMPANY_ID = '00000000-0000-0000-0000-000000000001';
-export const DEMO_PASSWORD = process.env.DEMO_DEFAULT_PASSWORD || 'PeoplePay@360';
+export const DEMO_PASSWORD = process.env.DEMO_DEFAULT_PASSWORD || 'PayProof@360';
 
 export interface SeedUserSpec {
   email: string;
@@ -16,7 +16,7 @@ export interface SeedUserSpec {
 
 export const DEMO_USER_SPECS: SeedUserSpec[] = [
   {
-    email: 'admin@peoplepay360.demo',
+    email: 'admin@payproof.demo',
     name: 'Sudeesh K',
     code: 'EMP-001',
     role: 'admin',
@@ -34,7 +34,7 @@ export const DEMO_USER_SPECS: SeedUserSpec[] = [
     phone: '+919876543211',
   },
   {
-    email: 'payroll.mgr@peoplepay360.demo',
+    email: 'payroll.mgr@payproof.demo',
     name: 'Rajesh Kulkarni',
     code: 'EMP-003',
     role: 'payroll_manager',
@@ -43,7 +43,7 @@ export const DEMO_USER_SPECS: SeedUserSpec[] = [
     phone: '+919876543212',
   },
   {
-    email: 'payroll.user@peoplepay360.demo',
+    email: 'payroll.user@payproof.demo',
     name: 'Neha Gupta',
     code: 'EMP-004',
     role: 'payroll_user',
@@ -52,7 +52,7 @@ export const DEMO_USER_SPECS: SeedUserSpec[] = [
     phone: '+919876543213',
   },
   {
-    email: 'employee.aravind@peoplepay360.demo',
+    email: 'employee.aravind@payproof.demo',
     name: 'Aravind Krishnan',
     code: 'EMP-005',
     role: 'employee',
@@ -61,7 +61,7 @@ export const DEMO_USER_SPECS: SeedUserSpec[] = [
     phone: '+919876543214',
   },
   {
-    email: 'employee.ananya@peoplepay360.demo',
+    email: 'employee.ananya@payproof.demo',
     name: 'Ananya Roy',
     code: 'EMP-006',
     role: 'employee',

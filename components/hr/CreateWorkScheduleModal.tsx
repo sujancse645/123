@@ -6,7 +6,7 @@ import { useApp } from '@/lib/context/app-context';
 import { DEPARTMENTS } from '@/lib/mock-data/departments-schedules';
 import type { WorkingSchedule, WorkingScheduleDay } from '@/lib/types';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
-import { peoplePayQueries } from '@/lib/supabase/peoplepay360_supabase_queries';
+import { peoplePayQueries } from '@/lib/supabase/payproof_supabase_queries';
 import { logLocalFallback } from '@/lib/demo/local-fallback';
 
 const WEEKDAYS = [

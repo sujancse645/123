@@ -525,7 +525,7 @@ export function MyLoansView() {
                   className="mt-0.5 rounded text-[#714B67] focus:ring-[#714B67]"
                 />
                 <label htmlFor="loan-consent" className="text-xs text-[#28262D] leading-relaxed cursor-pointer">
-                  I hereby authorize PeoplePay360 to deduct the scheduled monthly instalment of{' '}
+                  I hereby authorize PayProof to deduct the scheduled monthly instalment of{' '}
                   <span className="font-bold">{formatINR(monthlyDeduction)}</span> directly from my monthly salary payslip until full principal and interest are settled.
                 </label>
               </div>

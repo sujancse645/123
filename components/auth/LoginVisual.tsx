@@ -21,14 +21,14 @@ export function LoginVisual() {
   };
 
   return (
-    <aside ref={sceneRef} onPointerMove={moveScene} onPointerLeave={resetScene} className="login-scene relative hidden min-h-screen overflow-hidden bg-[#51364A] p-10 text-white lg:flex lg:flex-col lg:justify-between" aria-label="PeoplePay360 product overview">
+    <aside ref={sceneRef} onPointerMove={moveScene} onPointerLeave={resetScene} className="login-scene relative hidden min-h-screen overflow-hidden bg-[#51364A] p-10 text-white lg:flex lg:flex-col lg:justify-between" aria-label="PayProof product overview">
       <div className="login-scene-grid absolute inset-0" aria-hidden="true" />
       {Array.from({ length: 7 }, (_, index) => <span key={index} className={`login-bubble login-bubble-${index + 1}`} aria-hidden="true" />)}
 
       <div className="relative z-10 flex items-center gap-3">
         <span className="rounded-[12px] bg-white p-2 shadow-lg"><PeoplePayLogo size={38} /></span>
         <div>
-          <p className="text-xl font-bold">PeoplePay360</p>
+          <p className="text-xl font-bold">PayProof</p>
           <p className="text-xs text-white/70">One workspace for your people operations</p>
         </div>
       </div>

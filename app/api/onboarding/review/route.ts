@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         company_id: employee.company_id,
         user_id: employee.user_id,
         title: 'Onboarding Approved!',
-        content: 'Your profile and bank details have been verified by HR. You now have full access to your PeoplePay360 dashboard.',
+        content: 'Your profile and bank details have been verified by HR. You now have full access to your PayProof dashboard.',
         type: 'onboarding',
       } as any);
 

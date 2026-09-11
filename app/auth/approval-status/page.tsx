@@ -83,7 +83,7 @@ export default function ApprovalStatusPage() {
             <PeoplePayLogo size={40} />
             <div>
               <h1 className="text-lg font-bold text-[#28262D]">Onboarding Status</h1>
-              <p className="text-xs text-[#74717A]">PeoplePay360 Employee Verification Portal</p>
+              <p className="text-xs text-[#74717A]">PayProof Employee Verification Portal</p>
             </div>
           </div>
           <button

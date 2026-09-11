@@ -4,7 +4,7 @@ do $$
 declare v_company uuid; v_employee uuid; v_leave_type uuid; v_reviewer uuid;
 begin
   select id into v_company from public.companies order by created_at limit 1;
-  if v_company is null then raise notice 'PeoplePay360 seed skipped: create a company first'; return; end if;
+  if v_company is null then raise notice 'PayProof seed skipped: create a company first'; return; end if;
   select id into v_employee from public.employees where company_id=v_company order by created_at limit 1;
   select id into v_leave_type from public.leave_types where company_id=v_company and is_paid order by created_at limit 1;
   select user_id into v_reviewer from public.user_company_roles where company_id=v_company and role in ('hr_manager','admin') order by role limit 1;

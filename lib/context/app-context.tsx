@@ -41,7 +41,7 @@ import {
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { assertPayrollCanFinalize } from '@/lib/domain/peoplepay-calculations';
 import type { AuthenticatedSession } from '@/components/auth/AuthenticatedPeoplePayApp';
-import { peoplePayQueries } from '@/lib/supabase/peoplepay360_supabase_queries';
+import { peoplePayQueries } from '@/lib/supabase/payproof_supabase_queries';
 
 export interface ToastMessage {
   id: string;
@@ -720,7 +720,7 @@ export function AppProvider({
 
   const handleSignOut = async () => {
     try {
-      sessionStorage.removeItem('peoplepay360-demo-session');
+      sessionStorage.removeItem('payproof-demo-session');
       const supabase = getSupabaseBrowserClient();
       if (supabase) {
         await supabase.auth.signOut();
@@ -1270,7 +1270,7 @@ export function AppProvider({
     addToast('info', 'Notifications Cleared', 'All notices marked as read.');
   };
 
-  const updateCurrentEmployeePhoto=useCallback((photoUrl:string)=>{setEmployees(previous=>previous.map(employee=>employee.id===currentEmployee.id?{...employee,avatar:photoUrl}:employee));setCurrentUserState(previous=>previous.employeeId===currentEmployee.employeeId?{...previous,avatar:photoUrl}:previous);try{localStorage.setItem(`peoplepay360-profile-photo-${currentEmployee.id}`,photoUrl)}catch{/* signed URL remains in memory */}logLocalFallback('application','profile_photo_updated',{employeeId:currentEmployee.id});},[currentEmployee.id,currentEmployee.employeeId]);
+  const updateCurrentEmployeePhoto=useCallback((photoUrl:string)=>{setEmployees(previous=>previous.map(employee=>employee.id===currentEmployee.id?{...employee,avatar:photoUrl}:employee));setCurrentUserState(previous=>previous.employeeId===currentEmployee.employeeId?{...previous,avatar:photoUrl}:previous);try{localStorage.setItem(`payproof-profile-photo-${currentEmployee.id}`,photoUrl)}catch{/* signed URL remains in memory */}logLocalFallback('application','profile_photo_updated',{employeeId:currentEmployee.id});},[currentEmployee.id,currentEmployee.employeeId]);
 
   return (
     <AppContext.Provider
